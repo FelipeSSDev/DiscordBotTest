@@ -24,7 +24,7 @@ export default (message: Message, args: string[]) => {
         }));
 
         const pokemonEmbed = new MessageEmbed()
-          .setColor('#0099ff')
+          .setColor('#ee1515')
           .setTitle(response.name)
           .setThumbnail(response.sprites.other['official-artwork'].front_default)
           .addFields(...pokemonTypes, {name: 'Pokemon ID', value: response.id})
