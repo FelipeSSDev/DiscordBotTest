@@ -1,20 +1,21 @@
 import {readdirSync} from 'fs';
 import {Message} from 'discord.js';
-const PREFIX = '::';
+import Command from '../models/Command';
 
 export default (message: Message) => {
+  const command = new Command(message);
+
+  if (!command.startsWithPrefix()) return;
+
   const files = readdirSync(__dirname)
     .filter((fileName) => fileName !== 'index.ts')
     .map((fileName) => fileName.slice(0, -3));
 
-  if (!message.content.startsWith(PREFIX)) return;
-  const [command, ...args] = message.content.slice(PREFIX.length).split(' ');
-
   const commandExists = files.some((file) => {
-    if (command === file) {
-      const {default: commandHandler} = require(`./${file}.ts`);
+    if (command.argument === file) {
+      const {default: commandFunction} = require(`./${file}.ts`);
 
-      commandHandler(message, args);
+      commandFunction(command);
 
       return true;
     }

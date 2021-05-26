@@ -1,6 +1,7 @@
-import {Message, MessageEmbed} from 'discord.js';
+import {MessageEmbed} from 'discord.js';
 import axios from 'axios';
 import generateRandomNumber from '../utils/randomNumber';
+import Command from '../models/Command';
 
 interface TypeInfo {
   slot: number;
@@ -10,8 +11,8 @@ interface TypeInfo {
   };
 }
 
-export default (message: Message, args: string[]) => {
-  const commands: {[key: string]: () => {}} = {
+export default ({message, subarguments}: Command) => {
+  const validCommands: {[key: string]: () => {}} = {
     ['get-random']: async () => {
       try {
         const randomNumber = generateRandomNumber(1, 152);
@@ -39,10 +40,10 @@ export default (message: Message, args: string[]) => {
     },
   };
 
-  for (let key in commands) {
-    if (args[0] !== key) continue;
+  for (let key in validCommands) {
+    if (subarguments[0] !== key) continue;
 
-    return commands[key]();
+    return validCommands[key]();
   }
 
   return message.channel.send('Argumento não suportado pelo comando');
