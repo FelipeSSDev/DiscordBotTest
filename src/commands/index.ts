@@ -10,7 +10,7 @@ export default (message: Message) => {
   if (!message.content.startsWith(PREFIX)) return;
   const [command, ...args] = message.content.slice(PREFIX.length).split(' ');
 
-  const commandExists = files.some(async (file) => {
+  const commandExists = files.some((file) => {
     if (command === file) {
       const {default: commandHandler} = require(`./${file}.ts`);
 
